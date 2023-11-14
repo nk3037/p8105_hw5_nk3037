@@ -27,7 +27,7 @@ tidy_data = data %>%
          arm = recode(arm, "con" = "control", "exp" = "experimental"))
 
 # Making the spaghetti plot
-ggplot(tidy_data, aes(x = week, y = observation, color = factor(subject_id))) +
+ggplot(tidy_data, aes(x = week, y = observation, color = subject_id)) +
   geom_line() +
   facet_wrap(~arm) +
   labs(title = "Spaghetti Plot of Observations Over Time",
