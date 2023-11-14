@@ -12,13 +12,18 @@ library(readxl)
 
 ## Question 2
 ```{r}
-file_names <- list.files(path = "./data", pattern = ".csv", full.names = TRUE)
+# Create a dataframe with all the file names
+file_names = list.files(path = "./data", pattern = ".csv", full.names = TRUE)
 
+# Separate arm and subject id and combie into a single dataframe
 data <- file_names %>%
   map_df(~ read.csv(.x) %>%
             mutate(subject_id = str_extract(basename(.x), "\\d+"),
                    arm = str_extract(basename(.x), "con|exp")))  
-
+# Remove unnecessary columns and convert to numeric
+tidy_data <- data %>%
+  gather(week, observation, -subject_id, -arm) %>%
+  mutate(week = as.numeric(str_extract(week, "\\d+")))
 
 ```
 
