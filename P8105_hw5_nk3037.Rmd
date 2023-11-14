@@ -9,6 +9,7 @@ output: github_document
 library(tidyverse)
 library(readxl)
 library(broom)
+library(ggplot2)
 ```
 
 ## Question 2
@@ -39,6 +40,7 @@ ggplot(tidy_data, aes(x = week, y = observation, color = subject_id)) +
 The observations over time for each subject seem to be more constant for the control arm and increase between weeks 2 and 8 for the experimental arm. In general, patients in the control and experimental arm had approximately the same starting observation at week 0. Patients, 02, 06 and 10 had a sudden decrease in observation values around week 5. Similarly, patients 03, 05, 08 and 10 had a sudden decrease in observation values around week 6. In general, the experimental arm had some effect on the patients observation values, but I can't say whether it's good or bad.
 
 ## Question 3
+### For mu = 0
 ```{r}
 # Set seed for reproducibility
 set.seed(1)
@@ -66,5 +68,21 @@ results = replicate(num_datasets, {
 # Save the mean mu and p-value
 mean_mu = sapply(results, function(result) result$estimate[1])
 p_values = sapply(results, function(result) result$p.value)
+
+cat("Mean of estimated means (mu_hat):", mean(mean_mu), "\n")
+cat("Mean of p-values:", mean(p_values), "\n")
+```
+
+### For mu = {1,2,3,4,5,6}
+```{r}
+# Set seed for reproducibility
+set.seed(10)
+
+# Set design elements
+n = 30
+sigma = 5
+alpha = 0.05
+num_datasets = 5000
+mu_values = c(1, 2, 3, 4, 5, 6)
 ```
 
