@@ -16,14 +16,15 @@ library(readxl)
 file_names = list.files(path = "./data", pattern = ".csv", full.names = TRUE)
 
 # Separate arm and subject id and combie into a single dataframe
-data <- file_names %>%
+data = file_names %>%
   map_df(~ read.csv(.x) %>%
             mutate(subject_id = str_extract(basename(.x), "\\d+"),
                    arm = str_extract(basename(.x), "con|exp")))  
 # Remove unnecessary columns and convert to numeric
-tidy_data <- data %>%
+tidy_data = data %>%
   gather(week, observation, -subject_id, -arm) %>%
-  mutate(week = as.numeric(str_extract(week, "\\d+")))
+  mutate(week = as.numeric(str_extract(week, "\\d+")),
+         arm = recode(arm, "con" = "control", "exp" = "experimental"))
 
 # Making the spaghetti plot
 ggplot(tidy_data, aes(x = week, y = observation, color = factor(subject_id))) +
