@@ -30,9 +30,9 @@ tidy_data = data %>%
 ggplot(tidy_data, aes(x = week, y = observation, color = subject_id)) +
   geom_line() +
   facet_wrap(~arm) +
-  labs(title = "Spaghetti Plot of Observations Over Time",
+  labs(title = "Spaghetti Plot of Observations Over Time For Each Subject",
        x = "Week",
        y = "Observation")
 ```
 
-
+The observations over time for each subject seem to be more constant for the control arm and increase between weeks 2 and 8 for the experimental arm. In general, patients in the control and experimental arm had approximately the same starting observation at week 0. Patients, 02, 06 and 10 had a sudden decrease in observation values around week 5. Similarly, patients 03, 05, 08 and 10 had a sudden decrease in observation values around week 6. In general, the experimental arm had some effect on the patients observation values, but I can't say whether it's good or bad.
