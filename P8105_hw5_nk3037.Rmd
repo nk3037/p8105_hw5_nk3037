@@ -69,13 +69,19 @@ results = expand.grid(mu = mu_values, dataset = 1:num_datasets) %>%
   tidyr::unnest(c(tidy_result, sample_data)) %>%
   mutate(reject_null = as.numeric(p.value < alpha))
 
-# Calculate power and average mu_hat for each mu value
+# Calculated power and average mu_hat for each mu value
 summary_stats = results %>%
   group_by(mu) %>%
   summarise(power = mean(reject_null, na.rm = TRUE),
             avg_mu_hat = mean(estimate, na.rm = TRUE),
             avg_mu_hat_rejected = mean(estimate * reject_null, na.rm = TRUE) / mean(reject_null, na.rm = TRUE))
 
+# Plot power vs. true mu
+ggplot(summary_stats, aes(x = mu, y = power)) +
+  geom_line() +
+  labs(title = "Power vs. True Effect Size",
+       x = "True Effect Size (μ)",
+       y = "Power")
 
 ```
 
