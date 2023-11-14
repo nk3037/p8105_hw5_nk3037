@@ -43,40 +43,7 @@ The observations over time for each subject seem to be more constant for the con
 ### For mu = 0
 ```{r}
 # Set seed for reproducibility
-set.seed(1)
-
-# Set design elements
-n = 30
-sigma = 5
-mu = 0
-alpha = 0.05
-num_datasets = 5000
-
-# One sample t-test
-t_test = function(data) {
-  t_test_result = t.test(data, mu = mu)
-  tidy_result = broom::tidy(t_test_result)
-  return(tidy_result)
-}
-
-# One sample t-test for each of the 5000 datasets
-results = replicate(num_datasets, {
-  data = rnorm(n, mean = mu, sd = sigma)
-  t_test(data)
-}, simplify = FALSE)
-
-# Save the mean mu and p-value
-mean_mu = sapply(results, function(result) result$estimate[1])
-p_values = sapply(results, function(result) result$p.value)
-
-cat("Mean of estimated means (mu_hat):", mean(mean_mu), "\n")
-cat("Mean of p-values:", mean(p_values), "\n")
-```
-
-### For mu = {1,2,3,4,5,6}
-```{r}
-# Set seed for reproducibility
-set.seed(10)
+set.seed(2)
 
 # Set design elements
 n = 30
@@ -85,27 +52,22 @@ alpha = 0.05
 num_datasets = 5000
 mu_values = c(1, 2, 3, 4, 5, 6)
 
-# one sample t-test
-t_test = function(sample_data, true_mu) {
+# One-sample t-test
+t_test = function(data, true_mu) {
   t_test_result = t.test(data, mu = true_mu)
   tidy_result = broom::tidy(t_test_result)
   return(tidy_result)
-  
 }
-# matrices to stores power and mean mu
-power_matrix = matrix(NA, nrow = length(mu_values), ncol = num_datasets)
-mean_mu_matrix = matrix(NA, nrow = length(mu_values), ncol = num_datasets)
 
-# loop through each mu value and for each of the 5000 datasets, do a one sample t-test
-for (i in seq_along(mu_values)) {
-  mu = mu_values[i]
+# perform t-test for each of the 5000 datasets, and put results in a tibble
+results <- expand.grid(mu = mu_values, dataset = 1:num_datasets) %>%
+  group_by(mu) %>%
+  rowwise() %>%
+  mutate(sample_data = list(rnorm(n, mean = mu, sd = sigma)),
+         tidy_result = list(perform_t_test(sample_data, true_mu = mu))) %>%
+  ungroup() %>%
+  tidyr::unnest(c(tidy_result, sample_data)) %>%
+  mutate(reject_null = as.numeric(p.value < alpha))
 
-results = replicate(num_datasets, {
-    sample_data = rnorm(n, mean = mu, sd = sigma)
-    tidy_result = perform_t_test(sample_data, true_mu = mu)
-    power_matrix[i, ] = tidy_result$p.value < alpha
-    mu_hat_matrix[i, ] = tidy_result$estimate[1]
-  })
-}
 ```
 
