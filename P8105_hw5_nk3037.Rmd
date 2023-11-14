@@ -25,6 +25,13 @@ tidy_data <- data %>%
   gather(week, observation, -subject_id, -arm) %>%
   mutate(week = as.numeric(str_extract(week, "\\d+")))
 
+# Making the spaghetti plot
+ggplot(tidy_data, aes(x = week, y = observation, color = factor(subject_id))) +
+  geom_line() +
+  facet_wrap(~arm) +
+  labs(title = "Spaghetti Plot of Observations Over Time",
+       x = "Week",
+       y = "Observation")
 ```
 
 
