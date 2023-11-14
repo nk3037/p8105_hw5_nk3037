@@ -83,5 +83,12 @@ ggplot(summary_stats, aes(x = mu, y = power)) +
        x = "True Effect Size (μ)",
        y = "Power")
 
+# Plot average mu_hat vs. true mu and average mu_hat in rejected cases
+ggplot(summary_stats, aes(x = mu)) +
+  geom_line(aes(y = avg_mu_hat), linetype = "solid") +
+  geom_line(aes(y = avg_mu_hat_rejected), linetype = "dashed") +
+  labs(title = "Average Estimate vs. True Effect Size",
+       x = "True Effect Size (μ)",
+       y = "Average Estimate of μ̂")
 ```
 
