@@ -96,5 +96,16 @@ t_test = function(sample_data, true_mu) {
 power_matrix = matrix(NA, nrow = length(mu_values), ncol = num_datasets)
 mean_mu_matrix = matrix(NA, nrow = length(mu_values), ncol = num_datasets)
 
+# loop through each mu value and for each of the 5000 datasets, do a one sample t-test
+for (i in seq_along(mu_values)) {
+  mu = mu_values[i]
+
+results = replicate(num_datasets, {
+    sample_data = rnorm(n, mean = mu, sd = sigma)
+    tidy_result = perform_t_test(sample_data, true_mu = mu)
+    power_matrix[i, ] = tidy_result$p.value < alpha
+    mu_hat_matrix[i, ] = tidy_result$estimate[1]
+  })
+}
 ```
 
