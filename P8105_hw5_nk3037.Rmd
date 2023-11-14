@@ -24,5 +24,10 @@ file_info = data.frame(file_name = basename(file_names)) %>%
 data_frames = lapply(file_names, function(file) {
   read.csv(file)
 })
+
+# Joined all the individual data frame into a single one
+tidy_data = bind_rows(data_frames, .id = "participant") %>%
+  left_join(file_info, by = c("participant" = "subject_id", "arm")) %>%
+  select(participant, subject_id, arm, everything())
 ```
 
