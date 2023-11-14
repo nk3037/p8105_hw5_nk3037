@@ -10,25 +10,24 @@ library(tidyverse)
 library(readxl)
 ```
 
-## Question 1
+## Question 2
 ```{r}
 # Loading in the data and creating a list of all file names
 study_data = "./data"
 file_names = list.files(study_data, pattern = "\\.csv", full.names = TRUE)
 
-# Separating filename into subject ID and arm
+# Extracting "arm" and "subject_id" from filenames
 file_info = data.frame(file_name = basename(file_names)) %>%
-  separate(file_name, into = c("arm", "subject_id"), sep = "_", extra = "merge") %>%
-  select(-3) 
+  separate(file_name, into = c("arm", "subject_id"), sep = "_", remove = FALSE)
 
-# Creating a data frame for every participant
-data_frames = lapply(file_names, function(file) {
-  read.csv(file)
-})
+# Create an empty list to store data frames
+data_frames = list()
 
-# Joined all the individual data frame into a single one
-tidy_data = bind_rows(data_frames, .id = "participant") %>%
-  left_join(file_info, by = "participant") %>%
-  select(participant, subject_id, arm, everything())
+# Loop through file names and read data into a list
+for (file in file_names) {
+  df <- read.csv(file)
+  df$subject_id <- basename(file_info[file_info$file_name == basename(file), ]$subject_id)
+  data_frames[[basename(file)]] <- df
+}
 ```
 
