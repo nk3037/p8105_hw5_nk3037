@@ -60,7 +60,7 @@ t_test = function(data, true_mu) {
 }
 
 # perform t-test for each of the 5000 datasets, and put results in a tibble
-results <- expand.grid(mu = mu_values, dataset = 1:num_datasets) %>%
+results = expand.grid(mu = mu_values, dataset = 1:num_datasets) %>%
   group_by(mu) %>%
   rowwise() %>%
   mutate(sample_data = list(rnorm(n, mean = mu, sd = sigma)),
@@ -68,6 +68,14 @@ results <- expand.grid(mu = mu_values, dataset = 1:num_datasets) %>%
   ungroup() %>%
   tidyr::unnest(c(tidy_result, sample_data)) %>%
   mutate(reject_null = as.numeric(p.value < alpha))
+
+# Calculate power and average mu_hat for each mu value
+summary_stats = results %>%
+  group_by(mu) %>%
+  summarise(power = mean(reject_null, na.rm = TRUE),
+            avg_mu_hat = mean(estimate, na.rm = TRUE),
+            avg_mu_hat_rejected = mean(estimate * reject_null, na.rm = TRUE) / mean(reject_null, na.rm = TRUE))
+
 
 ```
 
