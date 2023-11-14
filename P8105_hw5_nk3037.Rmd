@@ -18,7 +18,8 @@ file_names = list.files(study_data, pattern = "\\.csv", full.names = TRUE)
 
 # Separating filename into subject ID and arm
 file_info = data.frame(file_name = basename(file_names)) %>%
-  separate(file_name, into = c("subject_id", "arm"), sep = "_|\\.")
+  separate(file_name, into = c("arm", "subject_id"), sep = "_", extra = "merge") %>%
+  select(-3) 
 
 # Creating a data frame for every participant
 data_frames = lapply(file_names, function(file) {
@@ -27,7 +28,7 @@ data_frames = lapply(file_names, function(file) {
 
 # Joined all the individual data frame into a single one
 tidy_data = bind_rows(data_frames, .id = "participant") %>%
-  left_join(file_info, by = c("participant" = "subject_id", "arm")) %>%
+  left_join(file_info, by = "participant") %>%
   select(participant, subject_id, arm, everything())
 ```
 
