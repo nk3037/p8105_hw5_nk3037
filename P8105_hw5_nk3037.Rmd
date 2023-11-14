@@ -57,5 +57,10 @@ t_test = function(data) {
   return(tidy_result)
 }
 
+# One sample t-test for each of the 5000 datasets
+results = replicate(num_datasets, {
+  data = rnorm(n, mean = mu, sd = sigma)
+  t_test(data)
+}, simplify = FALSE)
 ```
 
