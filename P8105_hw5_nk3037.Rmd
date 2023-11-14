@@ -62,5 +62,9 @@ results = replicate(num_datasets, {
   data = rnorm(n, mean = mu, sd = sigma)
   t_test(data)
 }, simplify = FALSE)
+
+# Save the mean mu and p-value
+mean_mu = sapply(results, function(result) result$estimate[1])
+p_values = sapply(results, function(result) result$p.value)
 ```
 
