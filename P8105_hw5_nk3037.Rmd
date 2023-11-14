@@ -12,7 +12,12 @@ library(readxl)
 
 ## Question 1
 ```{r}
-study_data <- "./data"
-file_names <- list.files(study_data, pattern = "\\.csv", full.names = TRUE)
+# Loading in the data and creating a list of all file names
+study_data = "./data"
+file_names = list.files(study_data, pattern = "\\.csv", full.names = TRUE)
+
+# Separating filename into subject ID and arm
+file_info = data.frame(file_name = basename(file_names)) %>%
+  separate(file_name, into = c("subject_id", "arm"), sep = "_|\\.")
 ```
 
