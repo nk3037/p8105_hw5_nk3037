@@ -10,4 +10,10 @@ library(tidyverse)
 library(readxl)
 ```
 
+## Question 2
+```{r}
+file_names <- list.files(path = "./data", pattern = ".csv", full.names = TRUE)
+
+```
+
 
