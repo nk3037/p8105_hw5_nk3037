@@ -87,10 +87,14 @@ mu_values = c(1, 2, 3, 4, 5, 6)
 
 # one sample t-test
 t_test = function(sample_data, true_mu) {
-  t_test_result <- t.test(data, mu = true_mu)
-  tidy_result <- broom::tidy(t_test_result)
+  t_test_result = t.test(data, mu = true_mu)
+  tidy_result = broom::tidy(t_test_result)
   return(tidy_result)
+  
 }
+# matrices to stores power and mean mu
+power_matrix = matrix(NA, nrow = length(mu_values), ncol = num_datasets)
+mean_mu_matrix = matrix(NA, nrow = length(mu_values), ncol = num_datasets)
 
 ```
 
