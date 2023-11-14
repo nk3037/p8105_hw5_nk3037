@@ -49,5 +49,13 @@ sigma = 5
 mu = 0
 alpha = 0.05
 num_datasets = 5000
+
+# One sample t-test
+t_test = function(data) {
+  t_test_result = t.test(data, mu = mu)
+  tidy_result = broom::tidy(t_test_result)
+  return(tidy_result)
+}
+
 ```
 
