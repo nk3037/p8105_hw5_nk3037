@@ -17,7 +17,7 @@ library(ggplot2)
 # Create a dataframe with all the file names
 file_names = list.files(path = "./data", pattern = ".csv", full.names = TRUE)
 
-# Separate arm and subject id and combie into a single dataframe
+# Separate arm and subject id and combine into a single dataframe
 data = file_names %>%
   map_df(~ read.csv(.x) %>%
             mutate(subject_id = str_extract(basename(.x), "\\d+"),
