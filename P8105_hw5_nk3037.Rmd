@@ -91,4 +91,15 @@ ggplot(summary_stats, aes(x = mu)) +
        x = "True Effect Size (μ)",
        y = "Average Estimate of μ̂")
 ```
+**Describe the association between effect size and power.**
 
+Generally, as the true effect size increases, the power increases as well. However, in this case the effect sizes are pretty small and that could be why we cannot see a clear trend in the association and more difficult to detect a difference from the null hypothesis.
+
+**Is the sample average of μ̂ across tests for which the null is rejected approximately equal to the true value of μ? Why or why not?**
+
+In the "Average Estimate vs. True Effect Size" plot:
+
+* The solid line represents the average estimate of μ̂ across all simulations for each true value of μ.
+* The dashed line represents the average estimate of μ̂ only in cases where the null hypothesis was rejected (power > 0).
+
+The sample average of μ̂ across rejected cases tends to be close to the true value of μ but doesn't match exactly probably because of sampling variability and the errors that come with estimating population parameters from a sample.
